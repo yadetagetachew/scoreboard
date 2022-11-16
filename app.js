@@ -29,47 +29,97 @@
 //   </header>
 
 // );
+const players = [
+    {
+        name:"Yadi",
+        score:"30",
+        id:"1"
+    },
+    {
+        name:"Bobby",
+        score:"52",
+        id:"2"
+    },
+    {
+        name:"Trey",
+        score:"22",
+        id:"3"
+    },
+    {
+        name:"Jermaine",
+        score:"3",
+        id:"4"
+    },
+    {
+        name:"Villma",
+        score:"00",
+        id:"5"
+    },
+    {
+        name:"Becky",
+        score:"77",
+        id:"6"
+    },
+    {
+        name:"James",
+        score:"23",
+        id:"7"
+    }
 
-const Header = () => {
+];
+
+const Header = (props) => {
     return (
         <header>
-            <h1>Scoreboard</h1>
-            <span className="stats" >Player: 1</span>
+            <h1>{props.title}</h1>
+            <span className="stats" >Player: {props.totalPlayers}</span>
         </header>
     );
 }
 
-const Player = () => {
+const Player = (props) => {
     return(
         <div className="player">
             <span className="player-name">
-                Guil
+                {props.name}
             </span>
-            <Counter />
+            <Counter score={props.score}/>
         </div>
         
     );
 }
 
-const Counter = () => {
+const Counter = (props) => {
     return(
         <div className="counter">
             <button className="counter-action decrement"> - </button>
-            <span className="counter-score">35</span>
+            <span className="counter-score">{props.score}</span>
             <button className="counter-action increment"> + </button>
         </div>
     );
 }
 
-const App = () => {
+const App = (props) => {
     return (
         <div className="scoreboard">
-            <Header />
+            <Header 
+                title="Trivia Points" 
+                totalPlayers={players.length} 
+            />
+
             {/* Player List */}
-            <Player />
+            {props.initialPlayers.map( (player) =>
+                <Player 
+                    name={player.name}
+                    score={player.score}
+                    key={player.id}
+                />
+            )}            
         </div>
     );
 }
+
+
 
 // ReactDOM.render(
 // <Header />,
@@ -77,6 +127,6 @@ const App = () => {
 // );
 
 ReactDOM.render(
-    <App />,
+    <App initialPlayers={players} />,
     document.getElementById('root')
 );
