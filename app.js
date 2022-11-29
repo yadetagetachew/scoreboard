@@ -29,44 +29,7 @@
 //   </header>
 
 // );
-const players = [
-    {
-        name:"Yadi",
-        score:"30",
-        id:1
-    },
-    {
-        name:"Bobby",
-        score:"52",
-        id:2
-    },
-    {
-        name:"Trey",
-        score:"22",
-        id:3
-    },
-    {
-        name:"Jermaine",
-        score:"3",
-        id:4
-    },
-    {
-        name:"Villma",
-        score:"00",
-        id:5
-    },
-    {
-        name:"Becky",
-        score:"77",
-        id:6
-    },
-    {
-        name:"James",
-        score:"23",
-        id:7
-    }
 
-];
 
 const Header = (props) => {
     return (
@@ -81,6 +44,7 @@ const Player = (props) => {
     return(
         <div className="player">
             <span className="player-name">
+            <button className="remove-player" onClick={() => props.removePlayer(props.id)}>x</button>
                 {props.name}
             </span>
             <Counter />
@@ -154,24 +118,74 @@ class Counter extends React.Component {
     };
 }
 
-const App = (props) => {
-    return (
-        <div className="scoreboard">
-            <Header 
-                title="Trivia Points" 
-                totalPlayers={props.initialPlayers.length} 
-            />
+class App extends React.Component {
 
-            {/* Player List */}
-            {props.initialPlayers.map( (player) =>
-                <Player 
-                    name={player.name}
-                    score={player.score}
-                    key={player.id.toString()}
+    state = {
+        // players used to be a const in global scope
+        players: [
+            {
+                name:"Yadi",
+                id:1
+            },
+            {
+                name:"Bobby",
+                id:2
+            },
+            {
+                name:"Trey",
+                id:3
+            },
+            {
+                name:"Jermaine",
+                id:4
+            },
+            {
+                name:"Villma",
+                id:5
+            },
+            {
+                name:"Becky",
+                id:6
+            },
+            {
+                name:"James",
+                id:7
+            }
+        ]
+    };
+
+    handleRemovPlayer = (id) => {
+        this.setState( prevState => {
+            return{
+                players: this.state.players.filter(p => p.id != id)
+            }
+        });
+    }
+
+    render() {
+        return (
+            <div className="scoreboard">
+                <Header 
+                    title="Trivia Points" 
+                    // totalPlayers={props.initialPlayers.length} 
+                    totalPlayers={this.state.players.length} 
                 />
-            )}            
-        </div>
-    );
+    
+                {/* Player List */}
+                {/* {props.initialPlayers.map( (player) => */}
+                {this.state.players.map( player =>
+                    <Player 
+                        name={player.name}
+                        score={player.score}
+                        id={player.id}
+                        key={player.id.toString()}
+                        removePlayer={this.handleRemovPlayer}
+                    />
+                )}            
+            </div>
+        );
+    }
+
 }
 
 
@@ -182,6 +196,7 @@ const App = (props) => {
 // );
 
 ReactDOM.render(
-    <App initialPlayers={players} />,
+    //<App initialPlayers={players} />,
+     <App />,
     document.getElementById('root')
 );
