@@ -64,7 +64,9 @@ const Player = (props) => {
 //         </div>
 //     );
 // }
-class Counter extends React.Component {
+const Counter = () => {
+    // below is similar to this.state in class components (initial value)
+    const [score, setScore] = React.useState(0);
     // constructor(){
     //     super()
     //     this.state = {
@@ -72,131 +74,166 @@ class Counter extends React.Component {
     //     };
     //  this.incrementScore.bind(this)
     // }
-    state = {
-        score: 0
-    };
+    // state = {
+    //     score: 0
+    // };
 
     // incrementScore(){
     //     this.setState({
     //         score: this.state.score + 1
     //     });
     // }
-    incrementScore = () => {
+    const incrementScore = () => {
         // this.setState({
         //     score: this.state.score + 1
         // });
-        this.setState(prevState => {
-            return {
-                score: prevState.score + 1
-            }
-        });
+
+        setScore(prevScore => prevScore + 1);
+        // this.setState(prevState => {
+        //     return {
+        //         score: prevState.score + 1
+        //     }
+        // });
     }
-    decrementScore(){
+    const decrementScore = () => {
         // this.setState({
         //     score: this.state.score - 1
         // });
-        this.setState( prevState => {
-            return{
-                score: prevState.score - 1
-            }
-        });
+        //You can omit the return key by wrapping in parentheses for performance 
+        //     this.setState( prevState => ({
+        //             score: prevState.score - 1
+        //     }));
+        setScore(prevScore => prevScore - 1);
+    }
+   
+    return(
+        <div className="counter">
+            {/* <button className="counter-action increment" onClick={this.incrementScore.bind(this)}> - </button> */}
+            {/* <button className="counter-action decrement" onClick={() => this.decrementScore()}> - </button> */}
+            <button className="counter-action decrement" onClick={() => decrementScore()}> - </button>
+            {/* <span className="counter-score">{this.state.score}</span> */}
+            <span className="counter-score">{score}</span>
+            {/* when using classes use (this) and use State like props */}
+            {/* <span className="counter-score">{this.props.score}</span> */}
+            {/* <button className="counter-action increment" onClick={this.incrementScore.bind(this)}> + </button> */}
+            {/* <button className="counter-action increment" onClick={this.incrementScore}> + </button> */}
+            <button className="counter-action increment" onClick={() => incrementScore()}> + </button>
+            {/* <button className="counter-action increment" onClick={() => this.incrementScore()}> + </button> */}
+        </div>
+    );  
+
+};
+
+const App = () => {
+const [players, setPlayers] = React.useState([
+    {
+        name:"Yadi",
+        id:1
+    },
+    {
+        name:"Bobby",
+        id:2
+    },
+    {
+        name:"Trey",
+        id:3
+    },
+    {
+        name:"Jermaine",
+        id:4
+    },
+    {
+        name:"Villma",
+        id:5
+    },
+    {
+        name:"Becky",
+        id:6
+    },
+    {
+        name:"James",
+        id:7
+    }
+]);
+    // state = {
+    //     // players used to be a const in global scope
+    //     players: [
+    //         {
+    //             name:"Yadi",
+    //             id:1
+    //         },
+    //         {
+    //             name:"Bobby",
+    //             id:2
+    //         },
+    //         {
+    //             name:"Trey",
+    //             id:3
+    //         },
+    //         {
+    //             name:"Jermaine",
+    //             id:4
+    //         },
+    //         {
+    //             name:"Villma",
+    //             id:5
+    //         },
+    //         {
+    //             name:"Becky",
+    //             id:6
+    //         },
+    //         {
+    //             name:"James",
+    //             id:7
+    //         }
+    //     ]
+    // };
+
+    const handleRemovPlayer = (id) => {
+        setPlayers(prevPlayers => prevPlayers.filter(p => p.id != id));
+        // this.setState( prevState => {
+        //     return{
+        //         players: prevState.players.filter(p => p.id != id)
+        //     }
+        // });
     }
 
-    render(){
-        return(
-            <div className="counter">
-                {/* <button className="counter-action increment" onClick={this.incrementScore.bind(this)}> - </button> */}
-                <button className="counter-action decrement" onClick={() => this.decrementScore()}> - </button>
-                <span className="counter-score">{this.state.score}</span>
-                {/* when using classes use (this) and use State like props */}
-                {/* <span className="counter-score">{this.props.score}</span> */}
-                {/* <button className="counter-action increment" onClick={this.incrementScore.bind(this)}> + </button> */}
-                <button className="counter-action increment" onClick={this.incrementScore}> + </button>
-                {/* <button className="counter-action increment" onClick={() => this.incrementScore()}> + </button> */}
-            </div>
-        );  
-    };
-}
-
-class App extends React.Component {
-
-    state = {
-        // players used to be a const in global scope
-        players: [
-            {
-                name:"Yadi",
-                id:1
-            },
-            {
-                name:"Bobby",
-                id:2
-            },
-            {
-                name:"Trey",
-                id:3
-            },
-            {
-                name:"Jermaine",
-                id:4
-            },
-            {
-                name:"Villma",
-                id:5
-            },
-            {
-                name:"Becky",
-                id:6
-            },
-            {
-                name:"James",
-                id:7
-            }
-        ]
-    };
-
-    handleRemovPlayer = (id) => {
-        this.setState( prevState => {
-            return{
-                players: this.state.players.filter(p => p.id != id)
-            }
-        });
-    }
-
-    render() {
-        return (
-            <div className="scoreboard">
-                <Header 
-                    title="Trivia Points" 
-                    // totalPlayers={props.initialPlayers.length} 
-                    totalPlayers={this.state.players.length} 
-                />
     
-                {/* Player List */}
-                {/* {props.initialPlayers.map( (player) => */}
-                {this.state.players.map( player =>
-                    <Player 
-                        name={player.name}
-                        score={player.score}
-                        id={player.id}
-                        key={player.id.toString()}
-                        removePlayer={this.handleRemovPlayer}
-                    />
-                )}            
-            </div>
-        );
-    }
+    return (
+        <div className="scoreboard">
+            <Header 
+                title="Score" 
+                // totalPlayers={props.initialPlayers.length} 
+                totalPlayers={players.length} 
+            />
 
+            {/* Player List */}
+            {/* {props.initialPlayers.map( (player) => */}
+            {/* initialPlayer was the name of the players const */}
+            {players.map( player =>
+                <Player 
+                    name={player.name}
+                    score={player.score}
+                    id={player.id}
+                    key={player.id.toString()}
+                    removePlayer={handleRemovPlayer}
+                />
+            )}            
+        </div>
+    );
 }
 
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 // ReactDOM.render(
 // <Header />,
 // document.getElementById('root')
 // );
 
-ReactDOM.render(
-    //<App initialPlayers={players} />,
-     <App />,
-    document.getElementById('root')
-);
+// ReactDOM.render(
+//     //<App initialPlayers={players} />,
+//      <App />,
+//     document.getElementById('root')
+// );
